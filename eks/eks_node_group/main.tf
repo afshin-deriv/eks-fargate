@@ -36,7 +36,7 @@ resource "aws_eks_node_group" "node" {
   cluster_name    = var.eks_cluster_name
   node_group_name = "${var.node_group_name}-${terraform.workspace}"
   node_role_arn   = aws_iam_role.eks_nodes.arn
-  subnet_ids      = [var.public_subnets[0], var.public_subnets[1]]
+  subnet_ids      = [var.subnet_ids[0], var.subnet_ids[1]]
   instance_types  = var.instance_types
   disk_size       = var.disk_size
 
