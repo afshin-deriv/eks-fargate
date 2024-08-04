@@ -34,6 +34,9 @@ resource "aws_eks_fargate_profile" "main" {
 
   selector {
     namespace = var.kubernetes_namespace
+    labels = {
+      app = "kube-nginx"
+    }
   }
 
   selector {
