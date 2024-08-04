@@ -21,6 +21,6 @@ module "fargate" {
   source                  = "./eks/fargate"
   eks_cluster_name        = module.eks_cluster.cluster_name
   fargate_profile_name    = var.fargate_profile_name
-  subnet_ids              = module.network.aws_subnets_private
+  subnet_ids              = module.network.aws_subnets_public
   kubernetes_namespace    = var.kubernetes_namespace
 }
