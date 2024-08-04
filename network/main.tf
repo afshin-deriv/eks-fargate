@@ -18,7 +18,7 @@ resource "aws_subnet" "pub_subnet" {
   count = length(data.aws_availability_zones.all.names)
 
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index)
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 3, count.index)
   availability_zone = data.aws_availability_zones.all.names[count.index]
   map_public_ip_on_launch = true
 
@@ -35,7 +35,7 @@ resource "aws_subnet" "priv_subnet" {
   count = length(data.aws_availability_zones.all.names)
 
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index + length(data.aws_availability_zones.all.names))
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 3, count.index + length(data.aws_availability_zones.all.names))
   availability_zone = data.aws_availability_zones.all.names[count.index]
   map_public_ip_on_launch = false
 
@@ -90,7 +90,6 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = var.cidr_block_igw
-    nat_gateway_id = aws_nat_gateway.nat.id
   }
   tags = {
     Name = "eks-private-rt-${terraform.workspace}"

@@ -34,7 +34,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   vpc_config {
     #endpoint_private_access = true
-    subnet_ids = [var.public_subnets[0], var.public_subnets[1], var.private_subnets[0], var.private_subnets[1]]
+    subnet_ids               = [var.public_subnets[0], var.public_subnets[1]]
   }
 
   tags = {
