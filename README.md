@@ -1,6 +1,7 @@
 # eks-fargate
 
 export AWS_SECRET_ACCESS_KEY="XXXXXX"
+
 export AWS_ACCESS_KEY_ID="XXXXXX"
 
 
