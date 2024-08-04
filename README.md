@@ -10,3 +10,7 @@ terraform apply -auto-approve -var-file=production.tfvars
 aws eks describe-cluster --name eks_cluster-default
 
 kubectl apply -f configmap.yaml
+
+kubectl apply -f nginx-deployment.yaml
+
+kubectl get pod -n kube-system
