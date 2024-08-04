@@ -35,7 +35,39 @@ resource "aws_eks_fargate_profile" "main" {
   selector {
     namespace = var.kubernetes_namespace
   }
+
   selector {
     namespace = "kube-system"
+    labels = {
+      k8s-app = "kube-dns"
+    }
   }
+}
+
+data "aws_iam_policy_document" "aws_fargate_logging_policy" {
+  statement {
+    sid = "1"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "aws_fargate_logging_policy" {
+  name   = "aws_fargate_logging_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.aws_fargate_logging_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_fargate_logging_policy_attach_role" {
+  role       = aws_iam_role.fargate_pod_execution_role.name
+  policy_arn = aws_iam_policy.aws_fargate_logging_policy.arn
 }

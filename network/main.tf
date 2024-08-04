@@ -63,16 +63,6 @@ resource "aws_eip" "nat_eip" {
   }
 }
 
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.pub_subnet[0].id
-
-  tags = {
-    Name = "eks-nat-gw-${terraform.workspace}"
-  }
-  depends_on = [ aws_internet_gateway.ig ]
-}
-
 #Route Table for Public Subnets
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
@@ -85,27 +75,9 @@ resource "aws_route_table" "public" {
   }
 }
 
-#Route Table for Private Subnets
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.vpc.id
-  route {
-    cidr_block = var.cidr_block_igw
-  }
-  tags = {
-    Name = "eks-private-rt-${terraform.workspace}"
-  }
-}
-
 resource "aws_route_table_association" "public" {
   count = length(data.aws_availability_zones.all.names)
 
   subnet_id      = element(aws_subnet.pub_subnet.*.id, count.index)
   route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "private" {
-  count = length(data.aws_availability_zones.all.names)
-
-  subnet_id      = element(aws_subnet.priv_subnet.*.id, count.index)
-  route_table_id = aws_route_table.private.id
 }

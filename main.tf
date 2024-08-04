@@ -17,18 +17,6 @@ module "eks_cluster" {
   private_subnets     = module.network.aws_subnets_private
 } 
 
-module "eks_node_group" {
-  source            = "./eks/eks_node_group"
-  eks_cluster_name  = module.eks_cluster.cluster_name
-  node_group_name   = var.node_group_name
-  subnet_ids        = [ module.network.aws_subnets_private[0], module.network.aws_subnets_private[1] ]
-  instance_types    = var.ng_instance_types
-  disk_size         = var.disk_size
-  desired_nodes     = var.desired_nodes
-  max_nodes         = var.max_nodes
-  min_nodes         = var.min_nodes
-}
-
 module "fargate" {
   source                  = "./eks/fargate"
   eks_cluster_name        = module.eks_cluster.cluster_name
